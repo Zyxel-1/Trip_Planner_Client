@@ -5,6 +5,7 @@ class GridBox extends Component {
     return(
       <div className="gridBox">
         <p>Grid</p>
+        <p>Nothing to show at the moment</p>
       </div>
     )
   }

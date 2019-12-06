@@ -6,8 +6,13 @@ class FilterBox extends Component {
     return(
       <div className="filterBox">
         <p>Filter</p>
+        <button onClick={this.props.toggleTrip}>Create New Trip</button>
         <input type="text"/>
         <button>Search</button>
+        
+        <select>
+          <option value="">Catagories</option>
+        </select>
       </div>
     )
   }

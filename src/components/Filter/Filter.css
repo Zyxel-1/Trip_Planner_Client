@@ -4,4 +4,9 @@
   border-color: white;
   border-style: solid;
   background-color: white;
+  width: 500px;
+}
+
+.createButton {
+  background-color: red;
 }
