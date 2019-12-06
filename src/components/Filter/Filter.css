@@ -1,5 +1,7 @@
-.FilterBox {
+.filterBox {
   height: 200px;
   border: 2px;
-  border-color: red;
+  border-color: white;
+  border-style: solid;
+  background-color: white;
 }
