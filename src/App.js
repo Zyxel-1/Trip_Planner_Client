@@ -5,6 +5,7 @@ import TokenServices from './utils/tokenServices';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
+
 function App() {
   /*
   let temp;
@@ -17,10 +18,10 @@ function App() {
   
   return (
     <Router>
-      <switch>
+      <Switch>
       <Route path="/" exact component={Authentication}/>
       <Route path="/home" exact component={TripPlanner}/>
-      </switch>
+      </Switch>
     </Router>
     
   );

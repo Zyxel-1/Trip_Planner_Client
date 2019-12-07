@@ -10,20 +10,57 @@ class Authentication extends Component {
     }
   }
 
-  signUpHandler = () =>{
+  signUpHandler = (e) =>{
+    e.preventDefault();
+
     const {email, password} = this.state;
     const data = {
       email,password
     }
     console.log(`Sending this to backend ${email} and ${password}`)
-    /*
+    const URL = process.env.REACT_APP_URL;
      axios
-     .post(`URL`,data)
+     .post(`${URL}/api/user`,data)
      .then(response =>{
+       console.log('Successfully registered. Redirecting to homepage...')
        localStorage.setItem('app-token',response.data.token);
+       this.props.history.push('/home');
      })
      .catch(error=>{
        try{
+         if(!error.status){
+           console.log(error)
+           console.error('A network error has occured.');
+         }else if(error.response.status === 400){
+           console.error('Bad Request');
+         }else if(error.response.status === 500){
+           console.error('An error has occurred on the server.');
+         }
+       }catch(ex){
+         Promise.reject(ex);
+       }
+     })
+  }
+
+  loginHandler = (e) =>{
+    e.preventDefault();
+
+    const {email, password} = this.state;
+    const data = {
+      email,password
+    }
+    console.log(`Sending this to backend ${email} and ${password}`)
+    const URL = process.env.REACT_APP_URL;
+     axios
+     .put(`${URL}/api/user`,data)
+     .then(response =>{
+       console.log('Successfully logged in. Redirecting to homepage...')
+       localStorage.setItem('app-token',response.data.token);
+       this.props.history.push('/home');
+     })
+     .catch(error=>{
+       try{
+         console.log(`Error: ${error.message}`)
          if(!error.status){
            console.error('A network error has occured.');
          }else if(error.response.status === 400){
@@ -35,11 +72,6 @@ class Authentication extends Component {
          Promise.reject(ex);
        }
      })
-     */
-  }
-
-  loginHandler = () =>{
-    console.log("Login");
   }
 
   render(){
