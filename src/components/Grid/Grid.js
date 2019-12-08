@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import ('./Grid.css')
 function GridBox(props) {
   
   return(
