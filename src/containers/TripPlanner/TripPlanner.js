@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import Filter from '../../components/Filter/Filter'
-import Grid from '../../components/Grid/Grid'
-import Trip from '../../components/Trip/Trip'
-import './TripPlanner.css'
-import TokenServices from '../../utils/tokenServices'
+import Filter from '../../components/Filter/Filter';
+import Grid from '../../components/Grid/Grid';
+import Trip from '../../components/Trip/Trip';
+import './TripPlanner.css';
+import axios from 'axios';
+import TokenServices from '../../utils/tokenServices';
 class TripPlanner extends Component {
   state = {
     createTrip: false
@@ -13,9 +14,22 @@ class TripPlanner extends Component {
      console.log('No token availbe pushing back to login') 
      this.props.history.push('/');
     }
+    this.fetchTrips();
   }
   fetchTrips = () =>{
     console.log('Fetching Trips');
+    const URL = process.env.REACT_APP_URL;
+    const token = TokenServices.getWholeToken();
+    axios.get(`${URL}/api/trip`,{
+      headers: {'Authorization': `bearer ${token}`}
+    })
+    .then((response)=>{
+      console.log(response.data)
+      
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
   }
   toggleCreateTrip = () =>{
     this.setState(prevState=>({

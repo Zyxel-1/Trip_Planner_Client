@@ -16,8 +16,19 @@ function getToken() {
 function removeToken() {
   localStorage.removeItem('app-token');
 }
+/**
+ * Gets the whole token
+ */
+function getWholeToken(){
+  const token = localStorage.getItem('app-token');
+  if(!token){
+    return null;  
+  }
+  return token;
+}
 
 module.exports = {
   getToken,
+  getWholeToken,
   removeToken,
 }
