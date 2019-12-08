@@ -7,7 +7,8 @@ import axios from 'axios';
 import TokenServices from '../../utils/tokenServices';
 class TripPlanner extends Component {
   state = {
-    createTrip: false
+    createTrip: false,
+    Trips: []
   }
   componentDidMount(){
     if(!TokenServices.getToken()){
@@ -20,11 +21,14 @@ class TripPlanner extends Component {
     console.log('Fetching Trips');
     const URL = process.env.REACT_APP_URL;
     const token = TokenServices.getWholeToken();
+
     axios.get(`${URL}/api/trip`,{
       headers: {'Authorization': `bearer ${token}`}
     })
     .then((response)=>{
       console.log(response.data)
+      window.localStorage.setItem('Trips', JSON.stringify(response.data));
+      this.setState({Trips: response.data})
       
     })
     .catch((error)=>{
@@ -43,7 +47,7 @@ class TripPlanner extends Component {
     return (
     <div className="wrapper">
       <Filter toggleTrip={this.toggleCreateTrip}/>
-      <Grid fetchTrips={this.fetchTrips}/>
+      <Grid fetchTrips={this.fetchTrips} Trips={this.state.Trips}/>
       {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip} removertrip={this.removeTripHandler}/>:null}
       
     </div>);

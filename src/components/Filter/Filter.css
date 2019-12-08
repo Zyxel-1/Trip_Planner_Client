@@ -1,12 +1,19 @@
 .filterBox {
-  height: 200px;
+  height: 250px;
   border: 2px;
-  border-color: white;
+  border-color: black;
   border-style: solid;
   background-color: white;
   width: 500px;
+  float: left;
 }
-
-.createButton {
-  background-color: red;
+.createTripButton {
+  padding: 10px;
+  margin: 10px;
+}
+.searchBar {
+}
+.catagoriesDropdown {
+  margin-top: 10px;
+  padding: 10px;
 }
