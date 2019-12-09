@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Spinner from '../../components/Spinner/Spinner';
 import axios from "axios";
 import './Authentication.css';
 class Authentication extends Component {
@@ -6,10 +7,15 @@ class Authentication extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      loading: false
     }
   }
-
+  toggleSpinner = () =>{
+    this.setState(prevState=>({
+      loading: !prevState.loading
+    }))
+  }
   signUpHandler = (e) =>{
     e.preventDefault();
 
@@ -18,15 +24,18 @@ class Authentication extends Component {
       email,password
     }
     console.log(`Sending this to backend ${email} and ${password}`)
+    this.toggleSpinner();
     const URL = process.env.REACT_APP_URL;
      axios
      .post(`${URL}/api/user`,data)
      .then(response =>{
+      this.toggleSpinner();
        console.log('Successfully registered. Redirecting to homepage...')
        localStorage.setItem('app-token',response.data.token);
        this.props.history.push('/home');
      })
      .catch(error=>{
+      this.toggleSpinner();
        try{
          if(!error.status){
            console.log(error)
@@ -77,11 +86,13 @@ class Authentication extends Component {
     const {email,password} = this.state;
     return (
       <div className="box">
+        <Spinner show={this.state.loading}/>
       <form>
         <div>
           <h1>Trip Planner</h1>
           <input type="email" name="email" value={email} className="email" placeholder="Email"  onChange={event => this.setState({ email: event.target.value })} />
           <input type="password" name="email" value={password} className="email" placeholder="Password" onChange={event => this.setState({ password: event.target.value })}/>
+          {}
           <button className="btn" onClick={this.signUpHandler}>SignUp</button>
           <button className="btn2" onClick={this.loginHandler}>Login</button>
         </div>
