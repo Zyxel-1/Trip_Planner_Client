@@ -12,7 +12,7 @@ class Trip extends Component {
     startDate:'',
     endDate:'',
     userID: '',
-    todo: [],
+    todoItem: [],
     setReminder:false,
   }
   submitTrip = ()=>{
@@ -51,9 +51,9 @@ class Trip extends Component {
   }
   // Creates a todo item
   createTodoItem = (title) =>{
-    this.setState((prevState)=>{
-      prevState.todo.push({doneStatus: false, title });
-    })
+    let storedTodos = this.state.todoItem;
+    storedTodos.push({doneStatus: false, title });
+    this.setState({todoItem: storedTodos});
 
   }
   // Removes a todo item
@@ -100,7 +100,7 @@ class Trip extends Component {
               createTodoItem={this.createTodoItem}
               removeTodoItem={this.removeTodoItem}
               markTodoItem={this.markTodoItem}
-              todoItems={this.state.todo}
+              todoItems={this.state.todoItem}
           />
           <br></br>
           <button onClick={this.handleSetReminderToggle}>Set Reminder </button>

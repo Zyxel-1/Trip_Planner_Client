@@ -49,7 +49,6 @@ class Authentication extends Component {
     const data = {
       email,password
     }
-    console.log(`Sending this to backend ${email} and ${password}`)
     const URL = process.env.REACT_APP_URL;
      axios
      .put(`${URL}/api/user`,data)
