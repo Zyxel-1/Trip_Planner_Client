@@ -185,46 +185,67 @@ class Trip extends Component {
     const {title, destination, startDate, category, endDate,setReminder} = this.state;
     return(
       <div className="tripBox">
-        <h1>New Trip</h1>
-        <div className="tripFormBox">
-          <span>Title:</span>
-          <input type="text" value={title} onChange={e => this.setState({title: e.target.value})}/>
-          <br></br>
-          <span>Destination:</span>
-          <input type="text" value={destination} onChange={e => this.setState({destination: e.target.value})}/>
-          <br></br>
-          <span>Category:</span>
-          <select name="categories" value={category} onChange={e=>this.setState({category: e.target.value})}>
-            <option value="None">None</option>
-            <option value="Personal">Personal</option>
-            <option value="Business">Business</option>
-
-          </select>
-          <br></br>
-          <span>Start Date:</span>
-          <input type="date"  name="trip-start"  value={startDate !== undefined ? startDate.substring(0,10):new Date().toISOString().slice(0,10) } min={new Date().toISOString().slice(0,10)} onChange={e => this.setState({startDate: e.target.value})}/>
-          <br></br>
-
-          <span>End Date:</span>
-          <input type="date"  name="trip-start" value={endDate !== undefined ? endDate.substring(0,10):"" } min={startDate !== undefined ? startDate.substring(0,10):""} onChange={e => this.setState({endDate: e.target.value})}/>
-          <br></br>
-          <span>Todos:</span>
-          <Todo
-              createTodoItem={this.createTodoItem}
-              removeTodoItem={this.removeTodoItem}
-              markTodoItem={this.markTodoItem}
-              todoItems={this.state.todoItem}
-          />
-          <br></br>
-          <button onClick={this.handleSetReminderToggle}>Set Reminder </button>
-          <span>{setReminder? "🔔 On": "❌ Off"}</span>
-          <br></br>
-          {this.props.mode === "update" ? <button onClick={this.updateTrip}>Update</button>: <button onClick={this.submitTrip}>Create</button>  }
-          <button onClick={this.props.toggleTrip}>Cancel</button>
-          {this.props.mode === "update" ? <button onClick={this.removeTrip}>Delete</button>:null  }
-        </div>
-        
-
+        {this.props.mode === 'create'? <h1>New Trip</h1>: <h1>Selected Trip</h1>}
+          <div className="formRow" >
+            <span>Title:</span>
+            <div className="inputContainer">
+              <input type="text" value={title} onChange={e => this.setState({title: e.target.value})}/>
+            </div>
+            
+          </div>
+          <div className="formRow">
+            <span>Destination:</span>
+            <div className="inputContainer">
+              <input type="text" value={destination} onChange={e => this.setState({destination: e.target.value})}/>
+            </div>
+            
+          </div>
+          <div className="formRow">
+            <span>Category:</span>
+            <div className="inputContainer">
+              <select name="categories" value={category} onChange={e=>this.setState({category: e.target.value})}>
+                <option value="None">None</option>
+                <option value="Personal">Personal</option>
+                <option value="Business">Business</option>
+              </select>
+            </div>
+            
+          </div>
+          <div className="formRow">
+            <span>Start Date:</span>
+            <div className="inputContainer">
+            <input type="date"  name="trip-start"  value={startDate !== undefined ? startDate.substring(0,10):new Date().toISOString().slice(0,10) } min={new Date().toISOString().slice(0,10)} onChange={e => this.setState({startDate: e.target.value})}/>
+            </div>
+            
+          </div>
+          
+          <div className="formRow">
+            <span>End Date:</span>
+            <div className="inputContainer">
+              <input type="date"  name="trip-start" value={endDate !== undefined ? endDate.substring(0,10):"" } min={startDate !== undefined ? startDate.substring(0,10):""} onChange={e => this.setState({endDate: e.target.value})}/>  
+            </div>
+            
+          </div>
+          
+          <div>
+            <span className="formRow">Todos:</span>
+            <Todo
+                createTodoItem={this.createTodoItem}
+                removeTodoItem={this.removeTodoItem}
+                markTodoItem={this.markTodoItem}
+                todoItems={this.state.todoItem}
+            />
+          </div>
+          <div className="setReminder">
+            <button onClick={this.handleSetReminderToggle}>Set Reminder </button>
+            <span>{setReminder? "🔔 On": "❌ Off"}</span>
+          </div>
+          
+          <div className="buttonControls">
+            {this.props.mode === "update" ? <button onClick={this.updateTrip}>Update</button>: <button onClick={this.submitTrip}>Create</button>  }
+            <button onClick={this.props.toggleTrip}>Cancel</button>
+            {this.props.mode === "update" ? <button onClick={this.removeTrip}>Delete</button>:null  }
+          </div>
       </div>
     )
   }

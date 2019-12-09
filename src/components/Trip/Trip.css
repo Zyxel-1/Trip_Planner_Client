@@ -1,6 +1,6 @@
 .tripBox {
   background: white;
-  height: 500px;
+  height: 520px;
   width: 300px;
   float: left;
   border: 2px;
@@ -9,8 +9,41 @@
   padding-left: 10px;
   margin-left: 10px;
 }
-.tripFormBox {
+
+.formRow {
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 10px;
+  margin: 0 auto;
 }
-.tripFormBox span {
-  padding-right: 10px;
+
+.formRow span {
+  text-align: left;
+  width: 100px;
+}
+
+.formRow .inputContainer {
+  display: flex;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+
+.todoLabel {
+  text-align: left;
+}
+
+.setReminder {
+  padding-top: 10px;
+}
+
+.setReminder span {
+  padding-left: 10px;
+}
+
+.buttonControls {
+  margin-top: 20px;
+}
+
+.buttonControls button {
+  margin-left: 10px;
 }

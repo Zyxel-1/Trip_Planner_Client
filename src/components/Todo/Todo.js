@@ -12,15 +12,18 @@ class Todo extends React.Component {
     return <div className='message-box'>
       {this.props.todoItems !== undefined  ? this.props.todoItems.map(item=>{
         return (
-        <div key={item.title}>
-          <button onClick={()=> this.props.markTodoItem(item.title)}>{item.doneStatus? "🔵 Done":"🔴 Need todo"}</button>
+        <div className="todoContainer" key={item.title}>
+          <button className="toggleButton" onClick={()=> this.props.markTodoItem(item.title)}>{item.doneStatus? "🔵":"🔴"}</button>
           <span className="todoItem">{item.title}</span>
-          <button onClick={() => this.props.removeTodoItem(item.title)}>Remove</button>
+          <button className="removeButton" onClick={() => this.props.removeTodoItem(item.title)}>Remove</button>
         </div>)
       }
         ): "No items to display"}
-      <input type="text" onChange={e => this.setState({title: e.target.value})} placeholder="Todo Item"/>
-      <button onClick={this.storeTodo}>Add Todo Item</button>
+      <div className="addTodos">
+        <input type="text" onChange={e => this.setState({title: e.target.value})} placeholder="Todo Item"/>
+        <button onClick={this.storeTodo}>Add Todo Item</button>  
+      </div>
+      
       
     </div>
   }

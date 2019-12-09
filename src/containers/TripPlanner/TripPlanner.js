@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Filter from '../../components/Filter/Filter';
 import Grid from '../../components/Grid/Grid';
 import Trip from '../../components/Trip/Trip';
+import Modal from '../../components/Modal/Modal';
 import './TripPlanner.css';
 import axios from 'axios';
 import TokenServices from '../../utils/tokenServices';
@@ -11,7 +12,10 @@ class TripPlanner extends Component {
     Trips: [],
     TemporaryTrips: [],
     SingleTrip: '',
-    TripMode: 'create'
+    TripMode: 'create',
+    showModal: false,
+    shownNotification: false,
+    upComingTrips: []
   }
   // Checks if the user is logged in, if not user gets redirected back to the signup page
   componentDidMount(){
@@ -20,6 +24,37 @@ class TripPlanner extends Component {
      this.props.history.push('/');
     }
     this.fetchTrips();
+    if(!this.state.shownNotification)
+      window.setTimeout(()=>{this.checkReminders()}, 2000)
+  }
+  toggleModal = () =>{
+    this.setState(prevState=>({
+      showModal: !prevState.showModal
+    }))
+  }
+  // Check reminders
+  checkReminders = () => {
+
+    console.log('Checking reminders');
+    if(this.state.Trips.length > 0){
+      const Trips = this.state.Trips;
+      const currentNotifications = Trips.filter((trip)=>{
+        return trip.setReminder
+      })
+      const sortedNotifications = currentNotifications.sort((a,b) => new Date(a.startDate.substring(0,10)) - new Date (b.startDate.substring(0,10)))
+      this.toggleModal();
+      this.setState({shownNotification: true})
+      if(sortedNotifications.length < 5){
+        this.setState({upComingTrips: sortedNotifications})  
+      }
+      else{
+        this.setState({upComingTrips: sortedNotifications.slice(0,4)})
+      }
+      
+    }else{
+      // No reminders
+    }
+    
   }
   // Fetches the dataset stored on the server
   fetchTrips = () =>{
@@ -30,7 +65,6 @@ class TripPlanner extends Component {
       headers: {'Authorization': `bearer ${token}`}
     })
     .then((response)=>{
-      console.log(response.data)
       this.setState({Trips: response.data})
       this.setState({TemporaryTrips: response.data})
     })
@@ -89,6 +123,12 @@ class TripPlanner extends Component {
   render(){ 
     return (
     <div className="wrapper">
+      <Modal 
+        show={this.state.showModal}
+        hideModal={this.toggleModal}
+        upComingTrips={this.state.upComingTrips}
+        displayTrip={this.displayTrip}
+      />
       <Filter 
         toggleTrip = {this.toggleCreateTrip}
         sortByCategories = {this.sortByCategories}
