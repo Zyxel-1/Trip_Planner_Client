@@ -57,12 +57,25 @@ class Trip extends Component {
 
   }
   // Removes a todo item
-  removeTodoItem = () =>{
+  removeTodoItem = (item) =>{
+    const todoItems = this.state.todoItem;
+    const newTodoItems = todoItems.filter((todo)=>{
+      return item.title !== todo.title
+    })
+    this.setState({todoItem: newTodoItems});
     
   }
   // Marks a todo item as complete or not
   markTodoItem = (title) =>{
     console.log(`This title is being toggled ${title}`);
+    const todoItems = this.state.todoItem;
+    const newTodoItems = todoItems.map((todo) => {
+      if(todo.title === title){
+        todo.doneStatus = !todo.doneStatus;
+      }
+      return todo;
+    })
+    this.setState({todoItem: newTodoItems});
   }
   // Toggles the value of setReminder
   handleSetReminderToggle = (event)=>{
