@@ -19,7 +19,7 @@ function GridBox(props) {
       </tr>
         </thead>
       <tbody>
-      {props.Trips.map(trip=>{
+      {props.Trips.length === 0? "No data to display":props.Trips.map(trip=>{
         return(
           <tr key={trip._id}>
             <td>{trip.title}</td>

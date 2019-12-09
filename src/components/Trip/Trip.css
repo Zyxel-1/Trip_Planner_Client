@@ -1,11 +1,16 @@
 .tripBox {
   background: white;
-  height: 400px;
-  width: 500px;
+  height: 500px;
+  width: 300px;
   float: left;
   border: 2px;
   border-color: black;
   border-style: solid;
   padding-left: 10px;
   margin-left: 10px;
+}
+.tripFormBox {
+}
+.tripFormBox span {
+  padding-right: 10px;
 }

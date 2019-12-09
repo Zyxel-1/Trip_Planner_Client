@@ -29,11 +29,26 @@ class TripPlanner extends Component {
       console.log(response.data)
       window.localStorage.setItem('Trips', JSON.stringify(response.data));
       this.setState({Trips: response.data})
-      
+
     })
-    .catch((error)=>{
-      console.log(error);
-    })
+    .catch(error => {
+      try {
+        // Handles errors that are not HTTP specific
+        console.error(error);
+        this.setState({ showRegistrationFailure: true });
+        if (!error.status) {
+          console.error('A network error has occured.');
+        } else if (error.response.status === 400) {
+          console.error('Bad Request');
+        } else if (error.response.status === 500) {
+          console.error('Something bad happended on the server.');
+        } else {
+          console.error('An unknown error has occurred');
+        }
+      } catch (ex) {
+        Promise.reject(ex);
+      }
+    });
   }
   toggleCreateTrip = () =>{
     this.setState(prevState=>({
@@ -48,7 +63,7 @@ class TripPlanner extends Component {
     <div className="wrapper">
       <Filter toggleTrip={this.toggleCreateTrip}/>
       <Grid fetchTrips={this.fetchTrips} Trips={this.state.Trips}/>
-      {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip} removertrip={this.removeTripHandler}/>:null}
+      {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip}/>:null}
       
     </div>);
   }
