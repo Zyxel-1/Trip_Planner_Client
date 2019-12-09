@@ -1,2 +1,4 @@
-[context.production.environment]
-  REACT_APP_SVR_API = "https://trip-planner-serv.herokuapp.com/"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
