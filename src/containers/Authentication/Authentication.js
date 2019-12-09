@@ -8,7 +8,9 @@ class Authentication extends Component {
     this.state = {
       email: '',
       password: '',
-      loading: false
+      loading: false,
+      errorMessage: '',
+      errorOccurred: false
     }
   }
   toggleSpinner = () =>{
@@ -23,7 +25,8 @@ class Authentication extends Component {
     const data = {
       email,password
     }
-    console.log(`Sending this to backend ${email} and ${password}`)
+    this.setState({errorMessage: ''})
+    this.setState({errorOccurred: false})
     this.toggleSpinner();
     const URL = process.env.REACT_APP_URL;
      axios
@@ -36,14 +39,18 @@ class Authentication extends Component {
      })
      .catch(error=>{
       this.toggleSpinner();
+      this.setState({errorOccurred: true})
        try{
          if(!error.status){
            console.log(error)
            console.error('A network error has occured.');
+           this.setState({errorMessage: 'A network error has occurred.'})
          }else if(error.response.status === 400){
            console.error('Bad Request');
+           this.setState({errorMessage: error.message})
          }else if(error.response.status === 500){
            console.error('An error has occurred on the server.');
+           this.setState({errorMessage: 'An issues has occured in the server.'})
          }
        }catch(ex){
          Promise.reject(ex);
@@ -85,19 +92,21 @@ class Authentication extends Component {
   render(){
     const {email,password} = this.state;
     return (
-      <div className="box">
-        <Spinner show={this.state.loading}/>
-      <form>
-        <div>
-          <h1>Trip Planner</h1>
-          <input type="email" name="email" value={email} className="email" placeholder="Email"  onChange={event => this.setState({ email: event.target.value })} />
-          <input type="password" name="email" value={password} className="email" placeholder="Password" onChange={event => this.setState({ password: event.target.value })}/>
-          {}
-          <button className="btn" onClick={this.signUpHandler}>SignUp</button>
-          <button className="btn2" onClick={this.loginHandler}>Login</button>
-        </div>
-      </form>
-      </div>);
+      <div>
+        <div className="box">
+            <Spinner show={this.state.loading}/>
+          <form>
+            <div>
+              <h1>Trip Planner</h1>
+              <input type="email" name="email" value={email} className="email" placeholder="Email"  onChange={event => this.setState({ email: event.target.value })} />
+              <input type="password" name="email" value={password} className="email" placeholder="Password" onChange={event => this.setState({ password: event.target.value })}/>
+              <button className="btn" onClick={this.signUpHandler}>SignUp</button>
+              <button className="btn2" onClick={this.loginHandler}>Login</button>
+            </div>
+          </form>
+          </div>
+          {this.state.errorOccurred? <div><p>{this.state.errorMessage}</p></div>: null}
+      </div>)
   }
 }
 
