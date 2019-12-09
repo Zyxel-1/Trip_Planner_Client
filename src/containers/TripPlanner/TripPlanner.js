@@ -59,10 +59,17 @@ class TripPlanner extends Component {
     console.log('This trip is removed.');
   }
   sortByCategories = (category) => {
-    console.log(`Here is the ${category}`)
     let oldTrips = this.state.Trips;
     const newTrips = oldTrips.filter((trip)=>{
       return trip.category === category
+    })
+    this.setState({Trips: newTrips});
+  }
+  sortByCategories = (text) => {
+    console.log(`Filtering by ${text}`)
+    let oldTrips = this.state.Trips;
+    const newTrips = oldTrips.filter((trip)=>{
+      return trip.category === text || trip.destination === text;
     })
     this.setState({Trips: newTrips});
   }
