@@ -3,7 +3,6 @@ import axios from 'axios';
 import TokenServices from '../../utils/tokenServices';
 import Todo from '../Todo/Todo';
 import './Trip.css';
-import { CONNREFUSED } from "dns";
 
 class Trip extends Component {
   state = {
@@ -28,6 +27,7 @@ class Trip extends Component {
     })
     .then((response)=>{
       console.log(response);
+      this.props.fetchTrips();
       this.props.toggleTrip();
     })
     .catch(error => {
@@ -69,7 +69,7 @@ class Trip extends Component {
     this.setState(prevState=>({ setReminder: !prevState.setReminder}))
   }
   render(){
-    const {title, destination, category, startDate, endDate,setReminder} = this.state;
+    const {title, destination, startDate, endDate,setReminder} = this.state;
     return(
       <div className="tripBox">
         <h1>New Trip</h1>

@@ -63,7 +63,7 @@ class TripPlanner extends Component {
     <div className="wrapper">
       <Filter toggleTrip={this.toggleCreateTrip}/>
       <Grid fetchTrips={this.fetchTrips} Trips={this.state.Trips}/>
-      {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip}/>:null}
+      {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip} fetchTrips={this.fetchTrips}/>:null}
       
     </div>);
   }
