@@ -21,7 +21,7 @@ function GridBox(props) {
       <tbody>
       {props.Trips.length === 0? "No data to display":props.Trips.map(trip=>{
         return(
-          <tr key={trip._id}>
+          <tr key={trip._id} onClick={()=>props.displayTrip(trip)}>
             <td>{trip.title}</td>
             <td>{trip.destination}</td>
             <td>{(Math.abs(new Date(trip.endDate) - new Date(trip.startDate))/1000)/86400 } days</td>

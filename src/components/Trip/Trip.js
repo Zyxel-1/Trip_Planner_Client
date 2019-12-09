@@ -6,23 +6,95 @@ import './Trip.css';
 
 class Trip extends Component {
   state = {
+    _id: '',
     title: '',
     destination: '',
-    category: '',
+    category: 'None',
     startDate:'',
     endDate:'',
     userID: '',
     todoItem: [],
     setReminder:false,
+    mode: ''
   }
-  submitTrip = ()=>{
+  componentDidMount(){
+    console.log(`here is the trip to display: ${this.props.displayTrip.startDate} and `)
+    if(this.props.mode === 'update'){
+      this.setState({
+        _id: this.props.displayTrip._id,
+        title: this.props.displayTrip.title,
+        destination:this.props.displayTrip.destination,
+        category: this.props.displayTrip.category,
+        startDate: this.props.displayTrip.startDate,
+        endDate: this.props.displayTrip.endDate,
+        userID: this.props.displayTrip.userID,
+        todoItem: this.props.displayTrip.todoItem,
+        setReminder: this.props.displayTrip.setReminder,
+      })
+    }
+  }
+  submitTrip = () => {
     const URL = process.env.REACT_APP_URL;
-    let data = this.state;
+    const data = {
+      title: this.state.title,
+      destination: this.state.destination,
+      category: this.state.category,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      userID: this.state.userID,
+      todoItem: this.state.todoItem,
+      setReminder: this.state.setReminder
+    }
     const token = TokenServices.getWholeToken();
     data.userID = TokenServices.getToken().id;
     
     // Submit axios request to the backend
     axios.post(`${URL}/api/trip`,data,{
+      headers: {'Authorization': `bearer ${token}`}
+    })
+    .then((response)=>{
+      console.log(response);
+      this.props.fetchTrips();
+      this.props.toggleTrip();
+    })
+    .catch(error => {
+      try {
+        // Handles errors that are not HTTP specific
+        console.error(error);
+        this.setState({ showRegistrationFailure: true });
+        if (!error.status) {
+          console.error('A network error has occured.');
+        } else if (error.response.status === 400) {
+          console.error('Bad Request');
+        } else if (error.response.status === 500) {
+          console.error('Something bad happended on the server.');
+        } else {
+          console.error('An unknown error has occurred');
+        }
+      } catch (ex) {
+        Promise.reject(ex);
+      }
+    });
+  }
+  updateTrip = () => {
+    console.log('Hello you are trying to update a trip');
+    const URL = process.env.REACT_APP_URL;
+    const data = {
+      _id: this.state._id,
+      title: this.state.title,
+      destination: this.state.destination,
+      category: this.state.category,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      userID: this.state.userID,
+      todoItem: this.state.todoItem,
+      setReminder: this.state.setReminder
+    }
+    const token = TokenServices.getWholeToken();
+    data.userID = TokenServices.getToken().id;
+    
+    // Submit axios request to the backend
+    axios.put(`${URL}/api/trip`,data,{
       headers: {'Authorization': `bearer ${token}`}
     })
     .then((response)=>{
@@ -57,17 +129,16 @@ class Trip extends Component {
 
   }
   // Removes a todo item
-  removeTodoItem = (item) =>{
+  removeTodoItem = (title) =>{
     const todoItems = this.state.todoItem;
     const newTodoItems = todoItems.filter((todo)=>{
-      return item.title !== todo.title
+      return title !== todo.title
     })
     this.setState({todoItem: newTodoItems});
     
   }
   // Marks a todo item as complete or not
   markTodoItem = (title) =>{
-    console.log(`This title is being toggled ${title}`);
     const todoItems = this.state.todoItem;
     const newTodoItems = todoItems.map((todo) => {
       if(todo.title === title){
@@ -82,7 +153,7 @@ class Trip extends Component {
     this.setState(prevState=>({ setReminder: !prevState.setReminder}))
   }
   render(){
-    const {title, destination, startDate, endDate,setReminder} = this.state;
+    const {title, destination, startDate, category, endDate,setReminder} = this.state;
     return(
       <div className="tripBox">
         <h1>New Trip</h1>
@@ -94,7 +165,7 @@ class Trip extends Component {
           <input type="text" value={destination} onChange={e => this.setState({destination: e.target.value})}/>
           <br></br>
           <span>Category:</span>
-          <select name="categories" onChange={e=>this.setState({category: e.target.value})}>
+          <select name="categories" value={category} onChange={e=>this.setState({category: e.target.value})}>
             <option value="None">None</option>
             <option value="Personal">Personal</option>
             <option value="Business">Business</option>
@@ -102,11 +173,11 @@ class Trip extends Component {
           </select>
           <br></br>
           <span>Start Date:</span>
-          <input type="date"  name="trip-start"  value={startDate} min={new Date().toISOString().slice(0,10)} onChange={e => this.setState({startDate: e.target.value})}/>
+          <input type="date"  name="trip-start"  value={startDate !== undefined ? startDate.substring(0,10):new Date().toISOString().slice(0,10) } min={new Date().toISOString().slice(0,10)} onChange={e => this.setState({startDate: e.target.value})}/>
           <br></br>
 
           <span>End Date:</span>
-          <input type="date"  name="trip-start" value={endDate} min={startDate} onChange={e => this.setState({endDate: e.target.value})}/>
+          <input type="date"  name="trip-start" value={endDate !== undefined ? endDate.substring(0,10):"" } min={startDate !== undefined ? startDate.substring(0,10):""} onChange={e => this.setState({endDate: e.target.value})}/>
           <br></br>
           <span>Todos:</span>
           <Todo
@@ -119,7 +190,8 @@ class Trip extends Component {
           <button onClick={this.handleSetReminderToggle}>Set Reminder </button>
           <span>{setReminder? "🔔 On": "❌ Off"}</span>
           <br></br>
-          <button onClick={this.submitTrip}>Save</button>
+          {this.props.mode === "update" ? <button onClick={this.updateTrip}>Update</button>: <button onClick={this.submitTrip}>Create</button>  }
+          
           <button onClick={this.props.toggleTrip}>Cancel</button>
         </div>
         
