@@ -58,10 +58,22 @@ class TripPlanner extends Component {
   removeTripHandler = () =>{
     console.log('This trip is removed.');
   }
+  sortByCategories = (category) => {
+    console.log(`Here is the ${category}`)
+    let oldTrips = this.state.Trips;
+    const newTrips = oldTrips.filter((trip)=>{
+      return trip.category === category
+    })
+    this.setState({Trips: newTrips});
+  }
   render(){ 
     return (
     <div className="wrapper">
-      <Filter toggleTrip={this.toggleCreateTrip}/>
+      <Filter 
+        toggleTrip={this.toggleCreateTrip}
+        sortByCategories={this.sortByCategories}
+      
+      />
       <Grid fetchTrips={this.fetchTrips} Trips={this.state.Trips}/>
       {this.state.createTrip? <Trip toggleTrip={this.toggleCreateTrip} fetchTrips={this.fetchTrips}/>:null}
       
