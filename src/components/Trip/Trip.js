@@ -18,7 +18,6 @@ class Trip extends Component {
     mode: ''
   }
   componentDidMount(){
-    console.log(`here is the trip to display: ${this.props.displayTrip.startDate} and `)
     if(this.props.mode === 'update'){
       this.setState({
         _id: this.props.displayTrip._id,
@@ -77,7 +76,6 @@ class Trip extends Component {
     });
   }
   updateTrip = () => {
-    console.log('Hello you are trying to update a trip');
     const URL = process.env.REACT_APP_URL;
     const data = {
       _id: this.state._id,
@@ -95,6 +93,37 @@ class Trip extends Component {
     
     // Submit axios request to the backend
     axios.put(`${URL}/api/trip`,data,{
+      headers: {'Authorization': `bearer ${token}`}
+    })
+    .then((response)=>{
+      console.log(response);
+      this.props.fetchTrips();
+      this.props.toggleTrip();
+    })
+    .catch(error => {
+      try {
+        // Handles errors that are not HTTP specific
+        console.error(error);
+        this.setState({ showRegistrationFailure: true });
+        if (!error.status) {
+          console.error('A network error has occured.');
+        } else if (error.response.status === 400) {
+          console.error('Bad Request');
+        } else if (error.response.status === 500) {
+          console.error('Something bad happended on the server.');
+        } else {
+          console.error('An unknown error has occurred');
+        }
+      } catch (ex) {
+        Promise.reject(ex);
+      }
+    });
+  }
+  removeTrip = () =>{
+    const URL = process.env.REACT_APP_URL;
+    const token = TokenServices.getWholeToken();
+    
+    axios.delete(`${URL}/api/trip/${this.state._id}`,{
       headers: {'Authorization': `bearer ${token}`}
     })
     .then((response)=>{
@@ -191,8 +220,8 @@ class Trip extends Component {
           <span>{setReminder? "🔔 On": "❌ Off"}</span>
           <br></br>
           {this.props.mode === "update" ? <button onClick={this.updateTrip}>Update</button>: <button onClick={this.submitTrip}>Create</button>  }
-          
           <button onClick={this.props.toggleTrip}>Cancel</button>
+          {this.props.mode === "update" ? <button onClick={this.removeTrip}>Delete</button>:null  }
         </div>
         
 

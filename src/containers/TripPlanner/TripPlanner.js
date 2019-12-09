@@ -61,17 +61,8 @@ class TripPlanner extends Component {
   }
   // Display a trip from the dataset in the trip component to edit or remove
   displayTrip = (trip) =>{
-    console.log(`Wanting to display: ${trip.title}`);
     this.setState({SingleTrip: trip})
     this.toggleCreateTrip('update');
-  }
-  // Update an existing trip in the dataset
-  updateTrip = (trip) => {
-    console.log(`Updating Trip ${trip}`)
-  }
-  // Removes a trip from the dataset and sends a request to the backend to update the database
-  removeTrip = () =>{
-    console.log('This trip is removed.');
   }
   // Filters all trips based on what category has been selected
   sortByCategories = (category) => {
